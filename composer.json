@@ -1,0 +1,29 @@
+{
+  "name": "{ROOT-DASHED-NAME}/{DASHED-NAME}",
+  "description": "{DESCRIPTION}",
+  "type": "library",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "rcm",
+    "module",
+    "zf2"
+  ],
+  "minimum-stability": "stable",
+  "homepage": "{HOMEPAGE}",
+  "authors": [
+    {
+      "name": "Brian Janish",
+      "email": "bjanish@relivinc.com",
+      "homepage": "{AUTHORHOMEPAGE}"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "zendframework/zendframework": "2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rcm \\redirect\\": "src/"
+    }
+  }
+}
