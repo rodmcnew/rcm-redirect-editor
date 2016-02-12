@@ -33,7 +33,20 @@ return [
                 'RcmAdmin\Controller\ApiAdminManageSitesController',
         ],
     ],
-
+    'navigation' => [
+        'RcmAdminMenu' => [
+            'Site' => [
+                'pages' => [
+                    'Redirect Editor' => [
+                        'label' => 'Redirect Editor',
+                        'class' => '',
+                        'uri' => '/redirect',
+                        'title' => 'Redirect Editor',
+                    ]
+                ]
+            ],
+        ]
+    ],
     'router' => [
         'routes' => [
             '/redirect' => [
@@ -67,4 +80,5 @@ return [
             'ViewJsonStrategy',
         ],
     ],
+
 ];
