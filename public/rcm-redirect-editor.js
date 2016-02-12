@@ -41,9 +41,6 @@ angular.module('rcmRedirectEditor')
                         getRedirects();
                     };
 
-                    // Get entire redirect list on page load
-                    getRedirects();
-
                     $scope.closeModal = function () {
                         $modalInstance.close();
                     };
@@ -329,19 +326,12 @@ angular.module('rcmRedirectEditor')
                         );
                     }
 
-                    var init = function () {
-                        $scope.redirectError = '';
-                        $scope.sites = [];
-                        $scope.redirect = {};
-                        $scope.redirectList = [];
-                        $scope.showAddButton = false;
-                        $scope.showSaveLink = false;
-                        $scope.redirectMessage = '';
-
-
-                        /**
-                         *  API to get list of existing domains
-                         */
+                    /**
+                     * getDomains
+                     *
+                     * Get list of all domains
+                     */
+                    function getDomains() {
                         rcmApiLibService.get(
                             {
                                 url: apiUrl.domains,
@@ -364,6 +354,20 @@ angular.module('rcmRedirectEditor')
                                 }
                             }
                         );
+                    }
+
+                    var init = function () {
+                        $scope.redirectError = '';
+                        $scope.sites = [];
+                        $scope.redirect = {};
+                        $scope.redirectList = [];
+                        $scope.showAddButton = false;
+                        $scope.showSaveLink = false;
+                        $scope.redirectMessage = '';
+                        
+                        getRedirects();
+
+                        getDomains();
 
                     };
 
