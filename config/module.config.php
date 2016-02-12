@@ -1,14 +1,23 @@
 <?php
 return [
-
     /**
      * Configuration
      */
-
     'asset_manager' => [
         'resolver_configs' => [
             'aliases' => [
                 'modules/rcm-redirect-editor/' => __DIR__ . '/../public/',
+            ],
+            'collections' => [
+                'modules/rcm-admin/admin.js' => [
+                    'modules/rcm-redirect-editor/rcm-redirect.js',
+                    'modules/rcm-redirect-editor/domain-filter.js',
+                    'modules/rcm-redirect-editor/redirect-list-filter.js',
+                    'modules/rcm-redirect-editor/rcm-redirect-editor.js'
+                ],
+                'modules/rcm/modules.css' => [
+                    'modules/rcm-redirect-editor/styles.css'
+                ],
             ],
         ],
     ],
@@ -16,28 +25,14 @@ return [
     /* */
     'controllers' => [
         'invokables' => [
-            'RcmRedirectEditor\Controller\RedirectController' => 'RcmRedirectEditor\Controller\RedirectController',
-            'RcmRedirectEditor\ApiController\RedirectController' => 'RcmRedirectEditor\ApiController\RedirectController',
-            'RcmAdmin\Controller\ApiAdminManageSitesController' => 'RcmAdmin\Controller\ApiAdminManageSitesController',
+            'RcmRedirectEditor\Controller\RedirectController' =>
+                'RcmRedirectEditor\Controller\RedirectController',
+            'RcmRedirectEditor\ApiController\RedirectController' =>
+                'RcmRedirectEditor\ApiController\RedirectController',
+            'RcmAdmin\Controller\ApiAdminManageSitesController' =>
+                'RcmAdmin\Controller\ApiAdminManageSitesController',
         ],
     ],
-    /* */
-//    'doctrine' => [
-//        'driver' => [
-//            'Redirect' => [
-//                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-//                'cache' => 'array',
-//                'paths' => [
-//                    __DIR__ . '/../src/Entity'
-//                ]
-//            ],
-//            'orm_default' => [
-//                'drivers' => [
-//                    'Redirect' => 'Redirect'
-//                ]
-//            ]
-//        ]
-//    ],
 
     'router' => [
         'routes' => [
@@ -46,7 +41,8 @@ return [
                 'options' => [
                     'route' => '/redirect',
                     'defaults' => [
-                        'controller' => 'RcmRedirectEditor\Controller\RedirectController',
+                        'controller' =>
+                            'RcmRedirectEditor\Controller\RedirectController',
                         'action' => 'index',
                     ],
                 ]
@@ -56,31 +52,13 @@ return [
                 'options' => [
                     'route' => '/api/redirect[/:id]',
                     'defaults' => [
-                        'controller' => 'RcmRedirectEditor\ApiController\RedirectController',
+                        'controller' =>
+                            'RcmRedirectEditor\ApiController\RedirectController',
                     ]
                 ],
             ],
         ],
     ],
-
-    /* */
-    'service_manager' => [
-        'config_factories' => [
-            /* Services - placeholder for format to use with redirect*/
-            'RcmRedirectEditor\Service\RedirectService' => [
-                'arguments' => [
-                    'Doctrine\ORM\EntityManager',
-                ]
-            ],
-        ],
-    ],
-////        'factories' => [
-////            'Reliv\Conference\Repository\ConferenceRepository'
-////            => 'Reliv\Conference\Factory\ConferenceRepositoryFactory',
-////            'Reliv\Conference\SkuValidator\SkusValidator'
-////            => 'Reliv\Conference\Factory\SkusValidatorFactory',
-////        ]
-//    ],
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',

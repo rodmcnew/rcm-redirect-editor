@@ -1,0 +1,206 @@
+<div class="container-fluid" id="rcmRedirect">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Redirect Editor</h1>
+        </div>
+    </div>
+    <div rcm-api-lib-message-directive
+         namespace="rcmRedirectAdminDirective"></div>
+    <div class="row top-buffer">
+        <div class="col-sm-3">
+            <button ng-click="setupAddRedirectModal()"
+                    type="button"
+                    class="btn btn-primary btn-md add-redirect"
+                    data-toggle="modal"
+                    data-target="#myModal">Add Redirect
+            </button>
+        </div>
+        <div class="col-sm-3">
+            <button ng-click="completeList()"
+                    type="button"
+                    class="btn btn-primary btn-md active">Complete list
+            </button>
+        </div>
+        <div class="col-sm-3">
+            <button ng-click="defaultList()"
+                    type="button"
+                    class="btn btn-primary btn-md">Default list
+            </button>
+        </div>
+    </div>
+    <div class="row top-buffer">
+        <div class="col-sm-6">
+            <input type="text" ng-model="redirectQuery"
+                   class="form-control search-box" placeholder="Search"
+                   id="searchDomains">
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal">&times;
+                    </button>
+                    <h1 class="modal-title">{{modalTitle}}</h1>
+                </div>
+                <div rcm-api-lib-message-directive
+                     namespace="rcmRedirectAdminDirective"></div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <strong>Request URL</strong>
+                        </div>
+
+
+                        <div class="col-sm-3">
+                            <strong>Redirect URL</strong>
+                        </div>
+
+
+                        <div class="col-sm-3">
+                            <strong>Domain</strong>
+                        </div>
+                    </div>
+                    <form class="form-inline"
+                          ng-show="redirectList">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <input ng-model="redirect.requestUrl"
+                                       type="text"
+                                       class="form-control">
+                            </div>
+                            <div class="col-sm-3">
+                                <input ng-model="redirect.redirectUrl"
+                                       type="text"
+                                       class="form-control"
+                                >
+                            </div>
+                            <div class="col-sm-3">
+                                <input ng-model="chosenRedirect"
+                                       type="text"
+                                       class="form-control"
+                                       readonly
+                                       placeholder="Use search below">
+                            </div>
+                            <div class="col-sm-3 clear-domain">
+                                <button ng-click="makeDefault()"
+                                        type="button"
+                                        class="btn btn-primary btn-md form-control"
+                                >Clear Domain
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-sm-6 empty-domain">
+                                <em>Empty domain will apply redirect to all
+                                    sites.</em>
+
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-sm-6">
+                                <strong>Select Domain</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="text"
+                                       ng-model="domainQuery"
+                                       class="form-control"
+                                       placeholder="Search">
+                            </div>
+                        </div>
+                        <div ng-show="domainQuery"
+                             ng-repeat="site in sites | domainFilter:domainQuery"
+                             ng-class="{grey: hover}"
+                             ng-mouseenter="hover = true"
+                             ng-mouseleave="hover = false"
+                             ng-click="saveSiteId(site)">
+                            <span ng-show="showList">{{site.domain}}</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="addRedirect(redirect)"
+                            type="button"
+                            ng-show="showAddButton"
+                            data-dismiss="modal"
+                            class="btn btn-primary btn-md"
+                    >Add
+                    </button>
+                    <button ng-click="updateRedirect(redirect.redirectId, redirect)"
+                            type="button"
+                            ng-show="showSaveLink"
+                            data-dismiss="modal"
+                            class="btn btn-primary btn-md"
+                    >Save
+                    </button>
+                    <button type="button"
+                            class="btn btn-default btn-md"
+                            data-dismiss="modal">Close
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>
+    <div class="row top-buffer">
+        <div class="col-sm-3">
+                <span ng-show="redirectList">
+                     <strong>Request URL</strong>
+                </span>
+        </div>
+        <div class="col-sm-3">
+                <span ng-show="redirectList">
+                    <strong>Redirect URL</strong>
+                </span>
+        </div>
+        <div class="col-sm-3">
+                 <span ng-show="redirectList">
+                    <strong>Domain</strong>
+                </span>
+        </div>
+    </div>
+    <div id="redirect-container">
+        <div ng-repeat="redirect in redirectList | redirectListFilter:redirectQuery"
+             class="spacer">
+            <div class="row">
+                <div class="col-sm-3">
+                    <input ng-change="saveRedirect(redirect)"
+                           ng-model="redirect.requestUrl" type="text"
+                           class="form-control field-width">
+                </div>
+                <div class="col-sm-3">
+                    <input ng-change="saveRedirect(redirect)"
+                           ng-model="redirect.redirectUrl" type="text"
+                           class="form-control field-width">
+                </div>
+                <div class="col-sm-3">
+                    <input ng-click="setupUpdateRedirectModal(redirect)"
+                           data-toggle="modal"
+                           data-target="#myModal"
+                           readonly
+                           ng-model="redirect.domain" type="text"
+                           class="form-control field-width">
+                </div>
+                <div class="col-sm-3 minus-adjust">
+                    <div class=" glyphicon glyphicon-minus-sign"
+                         ng-click="deleteRedirect(redirect)"></div>
+                <span class="default"
+                      ng-click="updateRedirect(redirect.redirectid, redirect)">
+                      <span ng-if="redirect.dirty"
+                            ng-switch="hidden"><a href="#" class="save-adjust">save</a>
+                      </span>
+                  </span>
+                <span ng-if="redirect.dirty == false"
+                      ng-switch="hidden"><span
+                        class="save-adjust">saved</span>
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

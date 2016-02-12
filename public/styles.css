@@ -1,0 +1,55 @@
+
+#rcmRedirect .top-buffer {
+    margin-top:20px;
+}
+
+#rcmRedirect .no-gutter > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}
+
+#rcmRedirect .search-box {
+    width: 100% !important;
+}
+#rcmRedirect .minus-adjust {
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 10px;
+}
+#rcmRedirect .save-adjust {
+    padding-left: 10px;
+}
+#rcmRedirect .results {
+    font-style: normal;
+    color: black;
+    padding: 5px;
+    display: inline;
+    clear: both;
+}
+
+#rcmRedirect .grey {
+    background-color: lightgrey;
+    padding: 5px;
+    display: inline;
+    clear: both;
+}
+#rcmRedirect .empty-domain {
+    color: darkgrey;
+}
+#rcmRedirect .footer-buttons {
+    position:relative;
+    display: inline;
+}
+#rcmRedirect .clear-domain {
+    padding-top: 5px;
+}
+
+#rcmRedirect .field-width {
+    width: 165px;
+}
+#rcmRedirect .spacer {
+    padding-bottom: 5px;
+}
+#rcmRedirect #redirect-container {
+    padding-bottom: 20px;
+}

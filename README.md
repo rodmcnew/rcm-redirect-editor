@@ -15,22 +15,22 @@ Rcm Redirect
 Reliv
 
 ##### Module copyright date: #####
-2015
+2016
 
 ##### Company or root namespace: #####
 Rcm
 
 ##### Module namespace: #####
-redirect
+RcmRedirectEditor
 
 ##### Project root name, lowercase, dash separated: #####
-{ROOT-DASHED-NAME}
+rcm-redirect-editor
 
 ##### Project name, lowercase, dash separated: #####
-{DASHED-NAME}
+redirect-editor
 
 ##### Project homepage: #####
-{HOMEPAGE}
+https://github.com/reliv
 
 ##### Project author: #####
 Brian Janish
@@ -39,4 +39,4 @@ Brian Janish
 bjanish@relivinc.com
 
 ##### Project author homepage: #####
-{AUTHORHOMEPAGE}
+https://github.com/bjanish/rcm-redirect-editor
