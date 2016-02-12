@@ -1,29 +1,32 @@
 {
-  "name": "{ROOT-DASHED-NAME}/{DASHED-NAME}",
-  "description": "{DESCRIPTION}",
+  "name": "rcm/redirect-editor",
+  "description": "Rcm Plugin module to edit all parts of a redirect.",
   "type": "library",
   "license": "BSD-3-Clause",
   "keywords": [
     "rcm",
     "module",
-    "zf2"
+    "zf2",
+    "redirect"
   ],
   "minimum-stability": "stable",
-  "homepage": "{HOMEPAGE}",
+  "homepage": "https://github.com/bjanish/rcm-redirect-editor",
   "authors": [
     {
       "name": "Brian Janish",
       "email": "bjanish@relivinc.com",
-      "homepage": "{AUTHORHOMEPAGE}"
+      "homepage": "https://github.com/reliv"
     }
   ],
   "require": {
     "php": ">=5.5",
-    "zendframework/zendframework": "2.*"
+    "zendframework/zendframework": "2.*",
+    "rcm/core": "0.*",
+    "bower-asset/bootstrap": "3.3.4"
   },
   "autoload": {
     "psr-4": {
-      "Rcm \\redirect\\": "src/"
+      "RcmRedirectEditor\\": "src/"
     }
   }
 }
