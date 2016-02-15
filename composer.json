@@ -21,7 +21,7 @@
   "require": {
     "php": ">=5.5",
     "zendframework/zendframework": "2.*",
-    "rcm/core": "0.*",
+    "rcm/core": "1.*",
     "bower-asset/bootstrap": "3.*"
   },
   "autoload": {
