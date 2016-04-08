@@ -11,7 +11,7 @@ angular.module('rcmRedirectEditor')
             var regex = new RegExp(query, 'i');
             angular.forEach(
                 input, function (site) {
-                    if (site.domain && regex.test(site.domain)) {
+                    if (site.domain && regex.test(site.domainName)) {
                         result[site.siteId] = site;
                     }
                 }

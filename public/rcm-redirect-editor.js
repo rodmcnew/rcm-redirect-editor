@@ -126,9 +126,9 @@ angular.module('rcmRedirectEditor')
 
                     //set siteId of domain that was selected from the list
                     $scope.saveSiteId = function (site) {
-                        $scope.domainQuery = site.domain;
-                        $scope.chosenRedirect = site.domain;
-                        $scope.redirect.domain = site.domain;
+                        $scope.domainQuery = site.domainName;
+                        $scope.chosenRedirect = site.domainName;
+                        $scope.redirect.domain = site.domainName;
                         $scope.redirect['siteId'] = site.siteId;
                     };
 
@@ -176,9 +176,9 @@ angular.module('rcmRedirectEditor')
 
                             //Run through sites object to find siteId
                         angular.forEach(sites, function (value) {
-                                if (queryDom === value.domain) {
+                                if (queryDom === value.domainName) {
                                     redirect.siteId = value.siteId;
-                                    $scope.redirect.domain = value.domain;
+                                    $scope.redirect.domain = value.domainName;
                                 }
                             }
                         );
