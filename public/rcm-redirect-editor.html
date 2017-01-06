@@ -24,10 +24,14 @@
     <div class="row top-buffer">
 
         <div class="col-sm-3">
-            <input type="radio" name="mode" ng-click="completeList()" ng-init="completeList()"> Complete list
+            <label>
+                <input type="radio" name="mode" ng-click="completeList()" checked="checked" ng-init="completeList()"> Complete list
+            </label>
         </div>
-        <div class="col-sm-3">
-            <input type="radio" name="mode" ng-click='defaultList()' ng-init="defaultList()"> Global Redirects
+        <div class="col-sm-4">
+            <label>
+                <input type="radio" name="mode" ng-click='defaultList()' ng-init="defaultList()"> Global Redirects
+            </label>
         </div>
     </div>
     <div class="modal fade" id="myModal" role="dialog">
