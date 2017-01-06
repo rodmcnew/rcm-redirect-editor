@@ -343,8 +343,13 @@ angular.module('rcmRedirectEditor')
                                     );
                                 },
                                 success: function (data) {
+
+                                    var sites = data.data;
+                                    angular.forEach(sites, function(value) {
+                                        $scope.sites = value;
+                                    });
+
                                     $scope.letter = '';
-                                    $scope.sites = data.data.items;
                                 },
                                 error: function (response) {
                                     rcmApiLibMessageService.addPrimaryMessage(

@@ -6,8 +6,13 @@
     </div>
     <div rcm-api-lib-message-directive
          namespace="rcmRedirectAdminDirective"></div>
-    <div class="row top-buffer">
-        <div class="col-sm-3">
+    <div class="row top-buffer search">
+        <div class="col-sm-6">
+            <input type="text" ng-model="redirectQuery"
+                   class="form-control search-box" placeholder="Search"
+                   id="searchDomains">
+        </div>
+        <div class="col-sm-3 pull-right addRedirect">
             <button ng-click="setupAddRedirectModal()"
                     type="button"
                     class="btn btn-primary btn-md add-redirect"
@@ -15,24 +20,22 @@
                     data-target="#myModal">Add Redirect
             </button>
         </div>
-        <div class="col-sm-3">
-            <button ng-click="completeList()"
-                    type="button"
-                    class="btn btn-primary btn-md active">Complete list
-            </button>
-        </div>
-        <div class="col-sm-3">
-            <button ng-click="defaultList()"
-                    type="button"
-                    class="btn btn-primary btn-md">Default list
-            </button>
-        </div>
     </div>
     <div class="row top-buffer">
-        <div class="col-sm-6">
-            <input type="text" ng-model="redirectQuery"
-                   class="form-control search-box" placeholder="Search"
-                   id="searchDomains">
+
+        <div class="col-sm-3">
+            <!--<button ng-click="completeList()"-->
+            <!--type="button"-->
+            <!--class="btn btn-primary btn-md active">Complete list-->
+            <!--</button>-->
+            <input type="radio" name="mode" ng-click="completeList()" ng-init="completeList()"> Complete list
+        </div>
+        <div class="col-sm-3">
+            <!--<button ng-click="defaultList()"-->
+            <!--type="button"-->
+            <!--class="btn btn-primary btn-md">Global Redirects-->
+            <!--</button>-->
+            <input type="radio" name="mode" ng-click='defaultList()' ng-init="defaultList()"> Global Redirects
         </div>
     </div>
     <div class="modal fade" id="myModal" role="dialog">
@@ -112,13 +115,14 @@
                                        placeholder="Search">
                             </div>
                         </div>
+
                         <div ng-show="domainQuery"
-                             ng-repeat="site in sites | domainFilter:domainQuery"
+                             ng-repeat="site in sites.items | domainFilter:domainQuery"
                              ng-class="{grey: hover}"
                              ng-mouseenter="hover = true"
                              ng-mouseleave="hover = false"
                              ng-click="saveSiteId(site)">
-                            <span ng-show="showList">{{site.domainName}}</span>
+                            <span ng-show="showList">{{site.domain.domain}}</span>
                         </div>
                     </form>
                 </div>
@@ -187,17 +191,18 @@
                            class="form-control field-width">
                 </div>
                 <div class="col-sm-3 minus-adjust">
-                    <div class=" glyphicon glyphicon-minus-sign"
-                         ng-click="deleteRedirect(redirect)"></div>
-                <span class="default"
-                      ng-click="updateRedirect(redirect.redirectid, redirect)">
+                    <button type="button" class="btn btn-warning"
+                            ng-click="deleteRedirect(redirect)">Delete
+                    </button>
+                    <span class="default"
+                          ng-click="updateRedirect(redirect.redirectid, redirect)">
                       <span ng-if="redirect.dirty"
                             ng-switch="hidden"><a href="#" class="save-adjust">save</a>
                       </span>
                   </span>
-                <span ng-if="redirect.dirty == false"
-                      ng-switch="hidden"><span
-                        class="save-adjust">saved</span>
+                    <span ng-if="redirect.dirty == false"
+                          ng-switch="hidden"><span
+                            class="save-adjust">saved</span>
                 </span>
                 </div>
             </div>

@@ -53,3 +53,11 @@
 #rcmRedirect #redirect-container {
     padding-bottom: 20px;
 }
+
+#rcmRedirect .top-buffer .search {
+    margin-bottom: 35px;
+}
+
+#rcmRedirect .top-buffer .addRedirect {
+    margin-top: 4px;
+}
