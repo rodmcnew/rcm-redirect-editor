@@ -4,7 +4,9 @@ namespace RcmRedirectEditor\ApiController;
 
 use Rcm\Entity\Redirect;
 use Rcm\Exception\RedirectException;
+use Rcm\Tracking\Exception\TrackingException;
 use RcmRedirectEditor\InputFilter\RedirectInputFilter;
+use RcmUser\Service\RcmUserService;
 use Reliv\RcmApiLib\Controller\AbstractRestfulJsonController;
 use Zend\Http\Response;
 use Zend\View\Model\JsonModel;
@@ -52,6 +54,32 @@ class RedirectController extends AbstractRestfulJsonController
     }
 
     /**
+     * @return RcmUserService
+     */
+    protected function getRcmUserService()
+    {
+        return $this->serviceLocator->get(RcmUserService::class);
+    }
+
+    /**
+     * @return string
+     * @throws TrackingException
+     */
+    protected function getCurrentUserId()
+    {
+        /** @var RcmUserService $service */
+        $service = $this->getRcmUserService();
+
+        $user = $service->getCurrentUser();
+
+        if (empty($user)) {
+            throw new TrackingException('A valid user is required in ' . static::class);
+        }
+
+        return (string)$user->getId();
+    }
+
+    /**
      * delete
      *
      * @param mixed $id
@@ -59,7 +87,7 @@ class RedirectController extends AbstractRestfulJsonController
      */
     public function delete($id)
     {
-        if (!$this->rcmIsAllowed(
+        if (!$this->getRcmUserService()->isAllowed(
             'sites',
             'admin'
         )
@@ -100,7 +128,7 @@ class RedirectController extends AbstractRestfulJsonController
      */
     public function update($id, $data)
     {
-        if (!$this->rcmIsAllowed(
+        if (!$this->getRcmUserService()->isAllowed(
             'sites',
             'admin'
         )
@@ -161,7 +189,7 @@ class RedirectController extends AbstractRestfulJsonController
      */
     public function create($data)
     {
-        if (!$this->rcmIsAllowed(
+        if (!$this->getRcmUserService()->isAllowed(
             'sites',
             'admin'
         )
@@ -186,7 +214,12 @@ class RedirectController extends AbstractRestfulJsonController
 
         $data = $inputFilter->getValues();
 
-        $newRedirect = new Redirect();
+        $currentUserId = $this->getCurrentUserId();
+
+        $newRedirect = new Redirect(
+            $currentUserId,
+            'New redirect in ' . static::class
+        );
 
         // @TODO filter data
         $newRedirect->populate($data);
@@ -220,7 +253,7 @@ class RedirectController extends AbstractRestfulJsonController
     {
         /* ACL */
 
-        if (!$this->rcmIsAllowed(
+        if (!$this->getRcmUserService()->isAllowed(
             'sites',
             'admin'
         )
