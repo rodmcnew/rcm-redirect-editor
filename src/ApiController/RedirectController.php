@@ -73,7 +73,7 @@ class RedirectController extends AbstractRestfulJsonController
         $user = $service->getCurrentUser();
 
         if (empty($user)) {
-            throw new TrackingException('A valid user is required in ' . static::class);
+            throw new TrackingException('A valid user is required in ' . self::class);
         }
 
         return (string)$user->getId();
@@ -218,7 +218,7 @@ class RedirectController extends AbstractRestfulJsonController
 
         $newRedirect = new Redirect(
             $currentUserId,
-            'New redirect in ' . static::class
+            'New redirect in ' . self::class
         );
 
         // @TODO filter data
@@ -227,6 +227,7 @@ class RedirectController extends AbstractRestfulJsonController
         $entityManager = $this->getEntityManager();
 
         try {
+            /** @var \Rcm\Repository\Redirect $redirectRepo */
             $redirectRepo = $entityManager->getRepository(
                 '\Rcm\Entity\Redirect'
             );
