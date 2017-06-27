@@ -276,7 +276,7 @@ class RedirectController extends AbstractRestfulJsonController
 
         /* get list of default redirects */
         if ($default === true) {
-            $redirectList = $em->getRepository('Rcm\Entity\Redirect')->findBy(
+            $redirectList = $em->getRepository(\Rcm\Entity\Redirect::class)->findBy(
                 ["site" => null]
             );
 
@@ -288,7 +288,7 @@ class RedirectController extends AbstractRestfulJsonController
             $queryBuilder = $em->createQueryBuilder();
 
             $queryBuilder->select('r')
-                ->from('Rcm\Entity\Redirect', 'r')
+                ->from(\Rcm\Entity\Redirect::class, 'r')
                 ->where('r.siteId IS NOT NULL');
 
             $redirectList = $queryBuilder->getQuery()->getResult();
@@ -302,9 +302,9 @@ class RedirectController extends AbstractRestfulJsonController
         if ($siteId !== null) {
             $siteId = (int) $siteId;
 
-            $site = $em->getRepository('Rcm\Entity\Site')->find($siteId);
+            $site = $em->getRepository(\Rcm\Entity\Site::class)->find($siteId);
 
-            $redirectList = $em->getRepository('Rcm\Entity\Redirect')->findBy(
+            $redirectList = $em->getRepository(\Rcm\Entity\Redirect::class)->findBy(
                 ["site" => $site]
             );
 
@@ -312,7 +312,7 @@ class RedirectController extends AbstractRestfulJsonController
         }
 
         /* all sites */
-        $redirectList = $em->getRepository('Rcm\Entity\Redirect')->findAll();
+        $redirectList = $em->getRepository(\Rcm\Entity\Redirect::class)->findAll();
 
         return $this->getApiResponse(
             $redirectList
