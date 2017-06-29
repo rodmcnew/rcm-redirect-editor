@@ -8,3 +8,5 @@
 build
 composer.lock
 nbproject
+vendor
+public/bower_components
