@@ -25,12 +25,10 @@ return [
     /* */
     'controllers' => [
         'invokables' => [
-            'RcmRedirectEditor\Controller\RedirectController' =>
-                'RcmRedirectEditor\Controller\RedirectController',
-            'RcmRedirectEditor\ApiController\RedirectController' =>
-                'RcmRedirectEditor\ApiController\RedirectController',
-            'RcmAdmin\Controller\ApiAdminManageSitesController' =>
-                'RcmAdmin\Controller\ApiAdminManageSitesController',
+            RcmRedirectEditor\Controller\RedirectController::class =>
+                RcmRedirectEditor\Controller\RedirectController::class,
+            RcmRedirectEditor\ApiController\RedirectController::class =>
+                RcmRedirectEditor\ApiController\RedirectController::class,
         ],
     ],
     'navigation' => [
@@ -55,7 +53,7 @@ return [
                     'route' => '/redirect',
                     'defaults' => [
                         'controller' =>
-                            'RcmRedirectEditor\Controller\RedirectController',
+                            RcmRedirectEditor\Controller\RedirectController::class,
                         'action' => 'index',
                     ],
                 ]
@@ -66,7 +64,7 @@ return [
                     'route' => '/api/redirect[/:id]',
                     'defaults' => [
                         'controller' =>
-                            'RcmRedirectEditor\ApiController\RedirectController',
+                            RcmRedirectEditor\ApiController\RedirectController::class,
                     ]
                 ],
             ],

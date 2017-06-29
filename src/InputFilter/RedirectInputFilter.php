@@ -30,24 +30,24 @@ class RedirectInputFilter extends InputFilter
                 'name' => 'requestUrl',
                 'required' => true,
                 'filters' => [
-                    ['name' => 'Zend\Filter\StripTags'],
-                    ['name' => 'Zend\Filter\StringTrim']
+                    ['name' => \Zend\Filter\StripTags::class],
+                    ['name' => \Zend\Filter\StringTrim::class]
                 ],
                 'validators' => [
-                    ['name' => 'Zend\Validator\NotEmpty'],
-                    ['name' => 'Zend\Validator\Uri'],
+                    ['name' => \Zend\Validator\NotEmpty::class],
+                    ['name' => \Zend\Validator\Uri::class],
                 ],
             ],
             'redirectUrl' => [
                 'name' => 'redirectUrl',
                 'required' => true,
                 'filters' => [
-                    ['name' => 'Zend\Filter\StripTags'],
-                    ['name' => 'Zend\Filter\StringTrim']
+                    ['name' => \Zend\Filter\StripTags::class],
+                    ['name' => \Zend\Filter\StringTrim::class]
                 ],
                 'validators' => [
-                    ['name' => 'Zend\Validator\NotEmpty'],
-                    ['name' => 'Zend\Validator\Uri'],
+                    ['name' => \Zend\Validator\NotEmpty::class],
+                    ['name' => \Zend\Validator\Uri::class],
                 ],
             ],
             'siteId' => [
@@ -56,7 +56,7 @@ class RedirectInputFilter extends InputFilter
                 'allow_empty' => true,
                 'continue_if_empty' => true,
                 'filters' => [
-                    ['name' =>'RcmRedirectEditor\Filter\IntOrNull']
+                    ['name' => \RcmRedirectEditor\Filter\IntOrNull::class]
                 ],
             ],
         ];
