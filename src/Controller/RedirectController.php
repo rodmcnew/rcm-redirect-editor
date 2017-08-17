@@ -2,11 +2,11 @@
 
 namespace RcmRedirectEditor\Controller;
 
+use Rcm\Acl\ResourceName;
+use RcmUser\Service\RcmUserService;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
-
-//use Reliv\Redirect\Service\RedirectService;
 
 /**
  * RedirectController
@@ -25,8 +25,6 @@ use Zend\Http\Response;
  */
 class RedirectController extends AbstractActionController
 {
-
-
     /**
      * indexAction
      *
@@ -34,16 +32,19 @@ class RedirectController extends AbstractActionController
      */
     public function indexAction()
     {
+        /** @var RcmUserService $rcmUserService */
+        $rcmUserService = $this->serviceLocator->get(RcmUserService::class);
 
-        if (!$this->rcmIsAllowed(
-            'sites',
+        if (!$rcmUserService->isAllowed(
+            ResourceName::RESOURCE_SITES,
             'admin'
         )
         ) {
             $this->getResponse()->setStatusCode(Response::STATUS_CODE_401);
+
             return $this->getResponse();
         }
-        return new ViewModel();
 
+        return new ViewModel();
     }
 }
