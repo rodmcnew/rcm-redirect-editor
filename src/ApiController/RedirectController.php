@@ -2,6 +2,7 @@
 
 namespace RcmRedirectEditor\ApiController;
 
+use Rcm\Acl\ResourceName;
 use Rcm\Entity\Redirect;
 use Rcm\Exception\RedirectException;
 use Rcm\Tracking\Exception\TrackingException;
@@ -88,7 +89,7 @@ class RedirectController extends AbstractRestfulJsonController
     public function delete($id)
     {
         if (!$this->getRcmUserService()->isAllowed(
-            'sites',
+            ResourceName::RESOURCE_SITES,
             'admin'
         )
         ) {
@@ -129,7 +130,7 @@ class RedirectController extends AbstractRestfulJsonController
     public function update($id, $data)
     {
         if (!$this->getRcmUserService()->isAllowed(
-            'sites',
+            ResourceName::RESOURCE_SITES,
             'admin'
         )
         ) {
@@ -190,7 +191,7 @@ class RedirectController extends AbstractRestfulJsonController
     public function create($data)
     {
         if (!$this->getRcmUserService()->isAllowed(
-            'sites',
+            ResourceName::RESOURCE_SITES,
             'admin'
         )
         ) {
@@ -253,9 +254,8 @@ class RedirectController extends AbstractRestfulJsonController
     public function getList()
     {
         /* ACL */
-
         if (!$this->getRcmUserService()->isAllowed(
-            'sites',
+            ResourceName::RESOURCE_SITES,
             'admin'
         )
         ) {
