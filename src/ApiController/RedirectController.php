@@ -228,9 +228,7 @@ class RedirectController extends AbstractRestfulJsonController
 
         try {
             /** @var \Rcm\Repository\Redirect $redirectRepo */
-            $redirectRepo = $entityManager->getRepository(
-                \Rcm\Entity\Redirect::class
-            );
+            $redirectRepo = $this->getRedirectRepo();
             $redirectRepo->save($newRedirect);
 
         } catch (RedirectException $e) {
@@ -276,7 +274,7 @@ class RedirectController extends AbstractRestfulJsonController
 
         /* get list of default redirects */
         if ($default === true) {
-            $redirectList = $em->getRepository(\Rcm\Entity\Redirect::class)->findBy(
+            $redirectList = $this->getRedirectRepo()->findBy(
                 ["site" => null]
             );
 
@@ -304,7 +302,7 @@ class RedirectController extends AbstractRestfulJsonController
 
             $site = $em->getRepository(\Rcm\Entity\Site::class)->find($siteId);
 
-            $redirectList = $em->getRepository(\Rcm\Entity\Redirect::class)->findBy(
+            $redirectList = $this->getRedirectRepo()->findBy(
                 ["site" => $site]
             );
 
@@ -312,7 +310,7 @@ class RedirectController extends AbstractRestfulJsonController
         }
 
         /* all sites */
-        $redirectList = $em->getRepository(\Rcm\Entity\Redirect::class)->findAll();
+        $redirectList = $this->getRedirectRepo()->findAll();
 
         return $this->getApiResponse(
             $redirectList
