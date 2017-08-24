@@ -9,14 +9,10 @@ use Rcm\Tracking\Exception\TrackingException;
 use RcmRedirectEditor\InputFilter\RedirectInputFilter;
 use RcmUser\Service\RcmUserService;
 use Reliv\RcmApiLib\Controller\AbstractRestfulJsonController;
-use Zend\Http\Response;
 use Zend\View\Model\JsonModel;
-use Zend\Validator\Uri;
 
 /**
  * RedirectController
- *
- * LongDescHere
  *
  * PHP version 5
  *
@@ -33,17 +29,19 @@ class RedirectController extends AbstractRestfulJsonController
     /**
      * getRedirectRepo
      *
-     * @return \Doctrine\ORM\EntityRepository
+     * @return \Rcm\Repository\Redirect
      */
     protected function getRedirectRepo()
     {
         $em = $this->getEntityManager();
 
         $redirectRepo = $em->getRepository(
-            '\Rcm\Entity\Redirect'
+            \Rcm\Entity\Redirect::class
         );
+
         return $redirectRepo;
     }
+
     /**
      * getEntityManager
      *
@@ -84,6 +82,7 @@ class RedirectController extends AbstractRestfulJsonController
      * delete
      *
      * @param mixed $id
+     *
      * @return \Reliv\RcmApiLib\Http\ApiResponse
      */
     public function delete($id)
@@ -99,7 +98,7 @@ class RedirectController extends AbstractRestfulJsonController
             );
         }
 
-        $id = (int) $id;
+        $id = (int)$id;
 
         $redirectRepo = $this->getRedirectRepo();
 
@@ -125,6 +124,7 @@ class RedirectController extends AbstractRestfulJsonController
      *
      * @param mixed $id
      * @param mixed $data
+     *
      * @return \Reliv\RcmApiLib\Http\ApiResponse
      */
     public function update($id, $data)
@@ -140,7 +140,7 @@ class RedirectController extends AbstractRestfulJsonController
             );
         }
 
-        $id = (int) $id;
+        $id = (int)$id;
 
         $inputFilter = new RedirectInputFilter();
 
@@ -158,6 +158,7 @@ class RedirectController extends AbstractRestfulJsonController
 
         $redirectRepo = $this->getRedirectRepo();
 
+        /** @var Redirect $redirectToUpdate */
         $redirectToUpdate = $redirectRepo->find($id);
 
         if (!$redirectToUpdate) {
@@ -173,9 +174,6 @@ class RedirectController extends AbstractRestfulJsonController
 
         $redirectRepo->save($redirectToUpdate);
 
-//        $em = $this->getEntityManager();
-//        $em->flush();
-
         return $this->getApiResponse(
             $redirectToUpdate
         );
@@ -186,6 +184,7 @@ class RedirectController extends AbstractRestfulJsonController
      * create
      *
      * @param mixed $data
+     *
      * @return \Reliv\RcmApiLib\Http\ApiResponse
      */
     public function create($data)
@@ -230,7 +229,7 @@ class RedirectController extends AbstractRestfulJsonController
         try {
             /** @var \Rcm\Repository\Redirect $redirectRepo */
             $redirectRepo = $entityManager->getRepository(
-                '\Rcm\Entity\Redirect'
+                \Rcm\Entity\Redirect::class
             );
             $redirectRepo->save($newRedirect);
 
@@ -241,6 +240,7 @@ class RedirectController extends AbstractRestfulJsonController
                 $e
             );
         }
+
         return $this->getApiResponse(
             $newRedirect
         );
@@ -271,7 +271,7 @@ class RedirectController extends AbstractRestfulJsonController
         $default = $this->params()->fromQuery('default-redirects');
 
         if ($default !== null) {
-            $default = (bool) $default;
+            $default = (bool)$default;
         }
 
         /* get list of default redirects */
@@ -300,7 +300,7 @@ class RedirectController extends AbstractRestfulJsonController
         $siteId = $this->params()->fromQuery('siteId');
 
         if ($siteId !== null) {
-            $siteId = (int) $siteId;
+            $siteId = (int)$siteId;
 
             $site = $em->getRepository(\Rcm\Entity\Site::class)->find($siteId);
 
