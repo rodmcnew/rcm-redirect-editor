@@ -2,13 +2,20 @@
 
 namespace RcmRedirectEditor\ApiController;
 
-use Rcm\Acl\ResourceName;
-use Rcm\Entity\Redirect;
+use Rcm\Api\Repository\Redirect\CreateRedirect;
+use Rcm\Api\Repository\Redirect\FindAllSiteRedirects;
+use Rcm\Api\Repository\Redirect\FindGlobalRedirects;
+use Rcm\Api\Repository\Redirect\FindRedirects;
+use Rcm\Api\Repository\Redirect\FindSiteRedirects;
+use Rcm\Api\Repository\Redirect\RemoveRedirect;
+use Rcm\Api\Repository\Redirect\UpdateRedirect;
 use Rcm\Exception\RedirectException;
 use Rcm\Tracking\Exception\TrackingException;
+use RcmRedirectEditor\Api\Acl\IsAllowed;
+use RcmRedirectEditor\Api\User\GetCurrentUserId;
 use RcmRedirectEditor\InputFilter\RedirectInputFilter;
-use RcmUser\Service\RcmUserService;
 use Reliv\RcmApiLib\Controller\AbstractRestfulJsonController;
+use Zend\Diactoros\ServerRequestFactory;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -27,37 +34,19 @@ use Zend\View\Model\JsonModel;
 class RedirectController extends AbstractRestfulJsonController
 {
     /**
-     * getRedirectRepo
+     * @param array $options
      *
-     * @return \Rcm\Repository\Redirect
+     * @return bool
      */
-    protected function getRedirectRepo()
+    protected function isAllowed(array $options = [])
     {
-        $em = $this->getEntityManager();
+        /** @var IsAllowed $isAllowed */
+        $isAllowed = $this->serviceLocator->get(IsAllowed::class);
 
-        $redirectRepo = $em->getRepository(
-            \Rcm\Entity\Redirect::class
+        return $isAllowed->__invoke(
+            ServerRequestFactory::fromGlobals(),
+            $options
         );
-
-        return $redirectRepo;
-    }
-
-    /**
-     * getEntityManager
-     *
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected function getEntityManager()
-    {
-        return $this->serviceLocator->get('Doctrine\ORM\EntityManager');
-    }
-
-    /**
-     * @return RcmUserService
-     */
-    protected function getRcmUserService()
-    {
-        return $this->serviceLocator->get(RcmUserService::class);
     }
 
     /**
@@ -66,16 +55,18 @@ class RedirectController extends AbstractRestfulJsonController
      */
     protected function getCurrentUserId()
     {
-        /** @var RcmUserService $service */
-        $service = $this->getRcmUserService();
+        /** @var GetCurrentUserId $service */
+        $service = $this->serviceLocator->get(GetCurrentUserId::class);;
 
-        $user = $service->getCurrentUser();
+        $userId = $service->__invoke(
+            ServerRequestFactory::fromGlobals()
+        );
 
-        if (empty($user)) {
+        if (empty($userId)) {
             throw new TrackingException('A valid user is required in ' . self::class);
         }
 
-        return (string)$user->getId();
+        return (string)$userId;
     }
 
     /**
@@ -87,11 +78,7 @@ class RedirectController extends AbstractRestfulJsonController
      */
     public function delete($id)
     {
-        if (!$this->getRcmUserService()->isAllowed(
-            ResourceName::RESOURCE_SITES,
-            'admin'
-        )
-        ) {
+        if (!$this->isAllowed(['method' => __METHOD__])) {
             return $this->getApiResponse(
                 null,
                 401
@@ -100,21 +87,20 @@ class RedirectController extends AbstractRestfulJsonController
 
         $id = (int)$id;
 
-        $redirectRepo = $this->getRedirectRepo();
-
-        $redirectToUpdate = $redirectRepo->findOneBy(
-            ['redirectId' => $id]
+        /** @var RemoveRedirect $removeRedirect */
+        $removeRedirect = $this->serviceLocator->get(RemoveRedirect::class);
+        $removed = $removeRedirect->__invoke(
+            $id,
+            $this->getCurrentUserId(),
+            'Remove redirect in ' . get_class($this)
         );
 
-        if (!$redirectToUpdate) {
+        if (!$removed) {
             return $this->getApiResponse(
-                $redirectToUpdate,
+                null,
                 404
             );
         }
-        $em = $this->getEntityManager();
-        $em->remove($redirectToUpdate);
-        $em->flush();
 
         return $this->getApiResponse(null);
     }
@@ -129,11 +115,7 @@ class RedirectController extends AbstractRestfulJsonController
      */
     public function update($id, $data)
     {
-        if (!$this->getRcmUserService()->isAllowed(
-            ResourceName::RESOURCE_SITES,
-            'admin'
-        )
-        ) {
+        if (!$this->isAllowed(['method' => __METHOD__])) {
             return $this->getApiResponse(
                 null,
                 401
@@ -156,28 +138,26 @@ class RedirectController extends AbstractRestfulJsonController
 
         $data = $inputFilter->getValues();
 
-        $redirectRepo = $this->getRedirectRepo();
+        /** @var UpdateRedirect $updateRedirect */
+        $updateRedirect = $this->serviceLocator->get(UpdateRedirect::class);
 
-        /** @var Redirect $redirectToUpdate */
-        $redirectToUpdate = $redirectRepo->find($id);
+        $redirectToUpdate = $updateRedirect->__invoke(
+            $id,
+            $data,
+            $this->getCurrentUserId(),
+            'Update redirect in ' . get_class($this)
+        );
 
-        if (!$redirectToUpdate) {
+        if (empty($redirectToUpdate)) {
             return $this->getApiResponse(
                 null,
                 404
             );
         }
 
-        $redirectToUpdate->setRedirectUrl($data['redirectUrl']);
-        $redirectToUpdate->setRequestUrl($data['requestUrl']);
-        $redirectToUpdate->setSiteId($data['siteId']);
-
-        $redirectRepo->save($redirectToUpdate);
-
         return $this->getApiResponse(
             $redirectToUpdate
         );
-
     }
 
     /**
@@ -189,11 +169,7 @@ class RedirectController extends AbstractRestfulJsonController
      */
     public function create($data)
     {
-        if (!$this->getRcmUserService()->isAllowed(
-            ResourceName::RESOURCE_SITES,
-            'admin'
-        )
-        ) {
+        if (!$this->isAllowed(['method' => __METHOD__])) {
             return $this->getApiResponse(
                 null,
                 401
@@ -214,22 +190,15 @@ class RedirectController extends AbstractRestfulJsonController
 
         $data = $inputFilter->getValues();
 
-        $currentUserId = $this->getCurrentUserId();
-
-        $newRedirect = new Redirect(
-            $currentUserId,
-            'New redirect in ' . self::class
-        );
-
-        // @TODO filter data
-        $newRedirect->populate($data);
-
-        $entityManager = $this->getEntityManager();
+        /** @var CreateRedirect $createRedirect */
+        $createRedirect = $this->serviceLocator->get(CreateRedirect::class);
 
         try {
-            /** @var \Rcm\Repository\Redirect $redirectRepo */
-            $redirectRepo = $this->getRedirectRepo();
-            $redirectRepo->save($newRedirect);
+            $newRedirect = $createRedirect->__invoke(
+                $data,
+                $this->getCurrentUserId(),
+                'New redirect in ' . self::class
+            );
 
         } catch (RedirectException $e) {
             return $this->getApiResponse(
@@ -252,19 +221,12 @@ class RedirectController extends AbstractRestfulJsonController
     public function getList()
     {
         /* ACL */
-        if (!$this->getRcmUserService()->isAllowed(
-            ResourceName::RESOURCE_SITES,
-            'admin'
-        )
-        ) {
+        if (!$this->isAllowed(['method' => __METHOD__])) {
             return $this->getApiResponse(
                 null,
                 401
             );
         }
-
-        $em = $this->getEntityManager();
-
         /* ***** filter by default redirects */
         $default = $this->params()->fromQuery('default-redirects');
 
@@ -274,22 +236,20 @@ class RedirectController extends AbstractRestfulJsonController
 
         /* get list of default redirects */
         if ($default === true) {
-            $redirectList = $this->getRedirectRepo()->findBy(
-                ["site" => null]
-            );
+            /** @var FindGlobalRedirects $findGlobalRedirects */
+            $findGlobalRedirects = $this->serviceLocator->get(FindGlobalRedirects::class);
+
+            $redirectList = $findGlobalRedirects->__invoke();
 
             return $this->getApiResponse($redirectList);
         }
 
         /* get list of all redirects that are NOT default redirects */
         if ($default === false) {
-            $queryBuilder = $em->createQueryBuilder();
+            /** @var FindAllSiteRedirects $findAllSiteRedirects */
+            $findAllSiteRedirects = $this->serviceLocator->get(FindAllSiteRedirects::class);
 
-            $queryBuilder->select('r')
-                ->from(\Rcm\Entity\Redirect::class, 'r')
-                ->where('r.siteId IS NOT NULL');
-
-            $redirectList = $queryBuilder->getQuery()->getResult();
+            $redirectList = $findAllSiteRedirects->__invoke();
 
             return $this->getApiResponse($redirectList);
         }
@@ -300,17 +260,19 @@ class RedirectController extends AbstractRestfulJsonController
         if ($siteId !== null) {
             $siteId = (int)$siteId;
 
-            $site = $em->getRepository(\Rcm\Entity\Site::class)->find($siteId);
+            /** @var FindSiteRedirects $findSiteRedirects */
+            $findSiteRedirects = $this->serviceLocator->get(FindSiteRedirects::class);
 
-            $redirectList = $this->getRedirectRepo()->findBy(
-                ["site" => $site]
-            );
+            $redirectList = $findSiteRedirects->__invoke($siteId);
 
             return $this->getApiResponse($redirectList);
         }
 
         /* all sites */
-        $redirectList = $this->getRedirectRepo()->findAll();
+        /** @var FindRedirects $findRedirects */
+        $findRedirects = $this->serviceLocator->get(FindRedirects::class);
+
+        $redirectList = $findRedirects->__invoke();
 
         return $this->getApiResponse(
             $redirectList

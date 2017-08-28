@@ -2,8 +2,8 @@
 
 namespace RcmRedirectEditor\Controller;
 
-use Rcm\Acl\ResourceName;
-use RcmUser\Service\RcmUserService;
+use RcmRedirectEditor\Api\Acl\IsAllowed;
+use Zend\Diactoros\ServerRequestFactory;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -26,20 +26,27 @@ use Zend\View\Model\ViewModel;
 class RedirectController extends AbstractActionController
 {
     /**
-     * indexAction
+     * @param array $options
      *
-     * @return ViewModel
+     * @return bool
+     */
+    protected function isAllowed(array $options = [])
+    {
+        /** @var IsAllowed $isAllowed */
+        $isAllowed = $this->serviceLocator->get(IsAllowed::class);
+
+        return $isAllowed->__invoke(
+            ServerRequestFactory::fromGlobals(),
+            $options
+        );
+    }
+
+    /**
+     * @return \Zend\Stdlib\ResponseInterface|ViewModel|Response
      */
     public function indexAction()
     {
-        /** @var RcmUserService $rcmUserService */
-        $rcmUserService = $this->serviceLocator->get(RcmUserService::class);
-
-        if (!$rcmUserService->isAllowed(
-            ResourceName::RESOURCE_SITES,
-            'admin'
-        )
-        ) {
+        if (!$this->isAllowed(['method' => __METHOD__])) {
             $this->getResponse()->setStatusCode(Response::STATUS_CODE_401);
 
             return $this->getResponse();
