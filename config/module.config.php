@@ -22,7 +22,7 @@ return [
         ],
     ],
 
-    /* */
+    /* controllers */
     'controllers' => [
         'invokables' => [
             RcmRedirectEditor\Controller\RedirectController::class =>
@@ -31,6 +31,8 @@ return [
                 RcmRedirectEditor\ApiController\RedirectController::class,
         ],
     ],
+
+    /* navigation */
     'navigation' => [
         'RcmAdminMenu' => [
             'Site' => [
@@ -45,6 +47,8 @@ return [
             ],
         ]
     ],
+
+    /* router */
     'router' => [
         'routes' => [
             '/redirect' => [
@@ -70,6 +74,19 @@ return [
             ],
         ],
     ],
+
+    /* service_manager */
+    'service_manager' => [
+        'factories' => [
+            \RcmRedirectEditor\Api\Acl\IsAllowed::class
+            => \RcmRedirectEditor\Api\Acl\IsAllowedRcmUserSitesAdminFactory::class,
+
+            \RcmRedirectEditor\Api\User\GetCurrentUserId::class
+            => \RcmRedirectEditor\Api\User\GetCurrentUserIdRcmUserFactory::class,
+        ],
+    ],
+
+    /* view_manager */
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -78,5 +95,4 @@ return [
             'ViewJsonStrategy',
         ],
     ],
-
 ];
