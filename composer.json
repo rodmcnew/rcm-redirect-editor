@@ -27,7 +27,7 @@
     "rcm/core": "^1.20.0",
     "rcm/core-js": "^1.0.0",
     "rcm/user": "^1",
-    "bower-asset/bootstrap": "^3.3",
+    "bower-asset/bootstrap": "~3.3",
     "zendframework/zend-diactoros": "^1",
     "zendframework/zend-filter": "2.*",
     "zendframework/zend-http": "2.*",
