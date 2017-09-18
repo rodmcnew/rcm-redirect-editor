@@ -48,17 +48,5 @@
   },
   "suggest": {
     "rcm/admin": "Allows RCM access to redirect links"
-  },
-  "extra": {
-    "asset-pattern-skip-version": "(-patch*)",
-    "asset-vcs-driver-options": {
-      "github-no-api": true
-    }
-  },
-  "config": {
-    "asset-pattern-skip-version": "(-patch*)",
-    "asset-installer-paths": {
-      "bower-asset-library": "public/bower_components"
-    }
   }
 }
