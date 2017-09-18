@@ -18,16 +18,17 @@
       "homepage": "https://github.com/reliv"
     }
   ],
+  "suggest":{
+    "bower-asset/bootstrap": "~3.3",
+  },
   "require": {
     "php": ">=5.5",
-    "fxp/composer-asset-plugin": "^1",
     "psr/container": "^1",
     "psr/http-message": "^1",
     "rcm/api-lib": "^0.10.0",
     "rcm/core": "^1.20.0",
     "rcm/core-js": "^1.0.0",
     "rcm/user": "^1",
-    "bower-asset/bootstrap": "~3.3",
     "zendframework/zend-diactoros": "^1",
     "zendframework/zend-filter": "2.*",
     "zendframework/zend-http": "2.*",
@@ -47,17 +48,5 @@
   },
   "suggest": {
     "rcm/admin": "Allows RCM access to redirect links"
-  },
-  "extra": {
-    "asset-pattern-skip-version": "(-patch*)",
-    "asset-vcs-driver-options": {
-      "github-no-api": true
-    }
-  },
-  "config": {
-    "asset-pattern-skip-version": "(-patch*)",
-    "asset-installer-paths": {
-      "bower-asset-library": "public/bower_components"
-    }
   }
 }
