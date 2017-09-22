@@ -19,7 +19,7 @@ angular.module('rcmRedirectEditor')
                     var apiUrl = {
                         redirect: '/api/redirect',
                         defaultRedirects: '/api/redirect?default-redirects=true',
-                        domains: '/api/admin/manage-sites?page_size=-1',
+                        domains: '/api/admin/manage-sites',
                         updateExistingRedirect: '/api/redirect/{id}'
                     };
 
