@@ -2,10 +2,12 @@
 
 namespace RcmRedirectEditor\Controller;
 
+use Interop\Container\ContainerInterface;
 use RcmRedirectEditor\Api\Acl\IsAllowed;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -25,6 +27,17 @@ use Zend\View\Model\ViewModel;
  */
 class RedirectController extends AbstractActionController
 {
+    /**
+     * @param ContainerInterface|ServiceLocatorInterface $serviceLocator
+     */
+    public function __construct(
+        $serviceLocator = null
+    ) {
+        if ($serviceLocator) {
+            $this->serviceLocator = $serviceLocator;
+        }
+    }
+
     /**
      * @param array $options
      *
