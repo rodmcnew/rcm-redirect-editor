@@ -2,7 +2,6 @@
 
 namespace RcmRedirectEditor\ApiController;
 
-use Interop\Container\ContainerInterface;
 use Rcm\Api\Repository\Redirect\CreateRedirect;
 use Rcm\Api\Repository\Redirect\FindAllSiteRedirects;
 use Rcm\Api\Repository\Redirect\FindGlobalRedirects;
@@ -17,7 +16,6 @@ use RcmRedirectEditor\Api\User\GetCurrentUserId;
 use RcmRedirectEditor\InputFilter\RedirectInputFilter;
 use Reliv\RcmApiLib\Controller\AbstractRestfulJsonController;
 use Zend\Diactoros\ServerRequestFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Model\JsonModel;
 
 /**
