@@ -13,8 +13,6 @@ use Zend\View\Model\ViewModel;
 /**
  * RedirectController
  *
- * LongDescHere
- *
  * PHP version 5
  *
  * @category  Reliv
